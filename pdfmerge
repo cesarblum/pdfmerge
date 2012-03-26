@@ -1,0 +1,35 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+    echo "USAGE: $(basename $0) input1 input2 ... output"
+    exit 1
+fi
+
+# Last command-line argument is the output file name
+outputfile=${!#}
+
+# Will hold a string containing input file names passed via command-line
+inputfiles=
+
+# This is a bit involved:
+#   - ${@:1:$(($#-1))} -> Command-line arguments except last
+#   - Arguments must be passed between "" so that file names with spaces
+#     in them are correctly captured (without quotes, such file names get
+#     split)
+for filename in "${@:1:$(($#-1))}"; do
+  inputfiles+=$filename
+  inputfiles+=$'\n'
+done
+
+# By default, bash breaks arguments based on spaces. The delimiter character
+# is controlled by the IFS variable. Set it to \n, which is the delimiter
+# used when building the string above
+IFS=$'\n'
+
+# Run the command handling file names with spaces in them correctly
+gs -q \
+   -dNOPAUSE \
+   -dBATCH \
+   -sDEVICE=pdfwrite \
+   -sOutputFile="$outputfile" \
+   $inputfiles
