@@ -9,4 +9,4 @@ Example:
 
     $ pdfmerge intro.pdf chapter1.pdf chapter2.pdf conclusion.pdf book.pdf
 
-*Important*: ''pdfmerge'' requires the ''gs'' command to perform its job.
+**Important**: `pdfmerge` requires the `gs` command to perform its job.
